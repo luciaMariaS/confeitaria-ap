@@ -1,6 +1,9 @@
 using Microsoft.OpenApi;
 using Confeitaria.Api.Dados;
 using Microsoft.EntityFrameworkCore;
+using Confeitaria.Api.Servicos;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -15,6 +18,28 @@ builder.Services.AddDbContext<AppDbContext>(o => o.UseNpgsql(connectionString));
 
 builder.Services.AddProblemDetails();
 builder.Services.AddHealthChecks().AddDbContextCheck<AppDbContext>();
+
+var tokenServico = new TokenServico(builder.Configuration);
+builder.Services.AddSingleton(tokenServico);
+builder.Services.AddScoped<AuthServico>();
+
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(o =>
+    {
+        o.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = TokenServico.Emissor,
+            ValidateAudience = true,
+            ValidAudience = TokenServico.Audiencia,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = tokenServico.Chave,
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.Zero
+        };
+    });
+builder.Services.AddAuthorization();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(o =>
@@ -46,7 +71,7 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     await db.Database.MigrateAsync();
-     await Semeador.SemearAsync(db, app.Configuration);
+    await Semeador.SemearAsync(db, app.Configuration);
 }
 
 app.UseExceptionHandler();
@@ -65,7 +90,7 @@ app.MapGet("/api/versao", () => new
 
 // Configure the HTTP request pipeline.
 
-
+app.UseAuthentication();
 
 app.UseAuthorization();
 
