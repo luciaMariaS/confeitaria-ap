@@ -22,6 +22,7 @@ builder.Services.AddHealthChecks().AddDbContextCheck<AppDbContext>();
 var tokenServico = new TokenServico(builder.Configuration);
 builder.Services.AddSingleton(tokenServico);
 builder.Services.AddScoped<AuthServico>();
+builder.Services.AddScoped<ProdutoServico>();
 
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
