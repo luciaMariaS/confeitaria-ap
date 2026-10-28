@@ -23,6 +23,7 @@ var tokenServico = new TokenServico(builder.Configuration);
 builder.Services.AddSingleton(tokenServico);
 builder.Services.AddScoped<AuthServico>();
 builder.Services.AddScoped<ProdutoServico>();
+builder.Services.AddScoped<EncomendaServico>();
 
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
