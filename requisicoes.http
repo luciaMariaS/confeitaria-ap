@@ -1,0 +1,149 @@
+@url = https://confeitaria-ap.onrender.com
+# para testar no seu computador, troque por: http://localhost:5048
+
+@tokenAdmin = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJjb25mZWl0YXJpYS1jbGllbnRlcyIsImlzcyI6ImNvbmZlaXRhcmlhLWFwaSIsImV4cCI6MTc5MzIzNzYxOCwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiIxIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6IkFkbWluaXN0cmFkb3JhIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiYWRtaW4iLCJpYXQiOjE3OTMyMzA0MTgsIm5iZiI6MTc5MzIzMDQxOH0.0uFQ4wPRas3uHOHP991FNr3jcIVIBME0VFTk277CA_I",
+@tokenAna = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJjb25mZWl0YXJpYS1jbGllbnRlcyIsImlzcyI6ImNvbmZlaXRhcmlhLWFwaSIsImV4cCI6MTc5MzIzNzU4NCwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiIyIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6IkFuYSBTb3V6YSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6ImNsaWVudGUiLCJpYXQiOjE3OTMyMzAzODUsIm5iZiI6MTc5MzIzMDM4NX0.vN9PGuMN8T_zV2XWGg-2fNrP1345Lrv3Lsrp6ZpjpfU",
+  "expiraEm": "2026-10-29T01:33:04.9259466+00:00",
+@tokenBruno = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJjb25mZWl0YXJpYS1jbGllbnRlcyIsImlzcyI6ImNvbmZlaXRhcmlhLWFwaSIsImV4cCI6MTc5MzIzNzY2MCwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZWlkZW50aWZpZXIiOiIzIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6IkJydW5vIExpbWEiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJjbGllbnRlIiwiaWF0IjoxNzkzMjMwNDYwLCJuYmYiOjE3OTMyMzA0NjB9.i-AP2hdKGQ_Ac5G54y3JJp4A-7Xnfvr08dNJlIIBZHQ",
+  "expiraEm": "2026-10-29T01:34:20.5217176+00:00",
+
+@idProduto = 11
+@idEncomenda = 1
+
+### Saúde e versão
+GET {{url}}/health
+###
+GET {{url}}/api/versao
+
+### Listagem pública paginada + busca · busca sem resultado (200, lista vazia)
+GET {{url}}/api/produtos?pagina=1&tamanho=5
+###
+GET {{url}}/api/produtos?busca=bolo
+###
+GET {{url}}/api/produtos?busca=zzzz
+
+### Detalhe · 404
+GET {{url}}/api/produtos/1
+###
+GET {{url}}/api/produtos/9999
+
+### Login (contas de teste do seed) → copie o token para as variáveis lá em cima
+POST {{url}}/api/auth/login
+Content-Type: application/json
+
+{ "email": "admin@exemplo.com", "senha": "Admin@2026" }
+
+###
+POST {{url}}/api/auth/login
+Content-Type: application/json
+
+{ "email": "ana@exemplo.com", "senha": "Cliente@2026" }
+
+###
+POST {{url}}/api/auth/login
+Content-Type: application/json
+
+{ "email": "bruno@exemplo.com", "senha": "Cliente@2026" }
+
+### Login com senha errada → 401
+POST {{url}}/api/auth/login
+Content-Type: application/json
+
+{ "email": "ana@exemplo.com", "senha": "errada123" }
+
+### Registro com senha curta → 400
+POST {{url}}/api/auth/registro
+Content-Type: application/json
+
+{ "nome": "Dani Rocha", "email": "dani@exemplo.com", "senha": "123" }
+
+### Registro com e-mail já usado → 409
+POST {{url}}/api/auth/registro
+Content-Type: application/json
+
+{ "nome": "Ana Souza", "email": "ana@exemplo.com", "senha": "Cliente@2026" }
+
+### Criar produto (admin) → 201 com Location
+POST {{url}}/api/produtos
+Authorization: Bearer {{tokenAdmin}}
+Content-Type: application/json
+
+{ "nome": "Pavê de Chocolate", "descricao": "Camadas de biscoito e creme.", "preco": 58, "categoria": "Sobremesa" }
+
+### Corpo inválido → 400
+POST {{url}}/api/produtos
+Authorization: Bearer {{tokenAdmin}}
+Content-Type: application/json
+
+{ "nome": "", "preco": -1, "categoria": "" }
+
+### Sem token → 401
+POST {{url}}/api/produtos
+Content-Type: application/json
+
+{ "nome": "Pavê", "preco": 58, "categoria": "Sobremesa" }
+
+### Cliente em rota de admin → 403
+POST {{url}}/api/produtos
+Authorization: Bearer {{tokenAna}}
+Content-Type: application/json
+
+{ "nome": "Pavê", "preco": 58, "categoria": "Sobremesa" }
+
+### Editar produto (admin) → 200
+PUT {{url}}/api/produtos/{{idProduto}}
+Authorization: Bearer {{tokenAdmin}}
+Content-Type: application/json
+
+{ "nome": "Pavê de Chocolate", "descricao": "Camadas de biscoito e creme.", "preco": 64, "categoria": "Sobremesa", "ativo": true }
+
+### Excluir produto (admin) → 204 (produto com encomendas dá 409)
+DELETE {{url}}/api/produtos/{{idProduto}}
+Authorization: Bearer {{tokenAdmin}}
+
+### Encomendas sem token → 401
+GET {{url}}/api/encomendas
+
+### Criar encomenda (Ana) → 201
+POST {{url}}/api/encomendas
+Authorization: Bearer {{tokenAna}}
+Content-Type: application/json
+
+{ "produtoId": 1, "quantidade": 2, "dataRetirada": "2026-11-20T15:00:00-03:00", "observacoes": "Sem granulado" }
+
+### Quantidade inválida → 400
+POST {{url}}/api/encomendas
+Authorization: Bearer {{tokenAna}}
+Content-Type: application/json
+
+{ "produtoId": 1, "quantidade": 0, "dataRetirada": "2026-11-20T15:00:00-03:00" }
+
+### Produto inexistente → 404
+POST {{url}}/api/encomendas
+Authorization: Bearer {{tokenAna}}
+Content-Type: application/json
+
+{ "produtoId": 9999, "quantidade": 1, "dataRetirada": "2026-11-20T15:00:00-03:00" }
+
+### Regra do 409: envie esta requisição várias vezes; a que passar de 5 na mesma data dá 409
+POST {{url}}/api/encomendas
+Authorization: Bearer {{tokenAna}}
+Content-Type: application/json
+
+{ "produtoId": 2, "quantidade": 1, "dataRetirada": "2026-12-18T15:00:00-03:00" }
+
+### Listar minhas encomendas (Ana vê só as dela) → 200
+GET {{url}}/api/encomendas
+Authorization: Bearer {{tokenAna}}
+
+### Listagem do Bruno, que não tem encomendas → 200 com lista vazia
+GET {{url}}/api/encomendas
+Authorization: Bearer {{tokenBruno}}
+
+### Bruno tenta cancelar a encomenda da Ana → 403
+POST {{url}}/api/encomendas/{{idEncomenda}}/cancelar
+Authorization: Bearer {{tokenBruno}}
+
+### Ana cancela a própria → 200 (de novo → 409)
+POST {{url}}/api/encomendas/{{idEncomenda}}/cancelar
+Authorization: Bearer {{tokenAna}}
