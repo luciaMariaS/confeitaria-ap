@@ -91,6 +91,8 @@ app.UseStatusCodePages();
 app.UseSwagger();
 app.UseSwaggerUI();
 
+app.MapGet("/", () => Results.Redirect("/swagger")).ExcludeFromDescription();
+app.MapHealthChecks("/health");
 app.MapGet("/api/versao", () => new VersaoDto(
     Environment.GetEnvironmentVariable("RENDER_GIT_COMMIT") ?? "local",
     app.Environment.EnvironmentName));
