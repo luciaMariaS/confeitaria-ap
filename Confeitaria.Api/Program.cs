@@ -42,6 +42,15 @@ builder.Services
         };
     });
 builder.Services.AddAuthorization();
+var origensConfig = builder.Configuration["Cors:Origens"];
+var origens = (string.IsNullOrWhiteSpace(origensConfig) ? "http://localhost:5173" : origensConfig)
+    .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+builder.Services.AddCors(o => o.AddDefaultPolicy(p => p
+    .WithOrigins(origens)
+    .AllowAnyHeader()
+    .AllowAnyMethod()
+    .WithExposedHeaders("Location")));
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(o =>
@@ -91,6 +100,8 @@ app.MapGet("/api/versao", () => new
 });
 
 // Configure the HTTP request pipeline.
+
+app.UseCors();
 
 app.UseAuthentication();
 
