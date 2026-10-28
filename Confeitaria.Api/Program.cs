@@ -91,13 +91,9 @@ app.UseStatusCodePages();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.MapGet("/", () => Results.Redirect("/swagger")).ExcludeFromDescription();
-app.MapHealthChecks("/health");
-app.MapGet("/api/versao", () => new
-{
-    commit = Environment.GetEnvironmentVariable("RENDER_GIT_COMMIT") ?? "local",
-    ambiente = app.Environment.EnvironmentName
-});
+app.MapGet("/api/versao", () => new VersaoDto(
+    Environment.GetEnvironmentVariable("RENDER_GIT_COMMIT") ?? "local",
+    app.Environment.EnvironmentName));
 
 // Configure the HTTP request pipeline.
 
@@ -110,5 +106,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+public record VersaoDto(string Commit, string Ambiente);
 
 public partial class Program { }
