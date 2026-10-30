@@ -68,8 +68,23 @@ dotnet run
 As migrations são aplicadas na subida da API (`MigrateAsync`). Para criar uma nova: `dotnet ef migrations add Nome --project Confeitaria.Api`.
 
 ## Front-end
+Cliente web em React 19 + TypeScript + Vite, na pasta `front/`, com react-router. O visual segue o
+design que criei no Figma para o ateliê fictício "Atelier Encanto".
 
-[Preencher quando o front estiver no ar: o que ele faz, as telas, e a variável `Cors__Origens` configurada na API com o endereço do front.]
+- **Vitrine (pública):** lista os produtos da API com busca e paginação. A busca e a página ficam
+  na URL (`?busca=` e `?pagina=`), há esqueletos de carregamento e uma tela "nada encontrado".
+- **Login e cadastro:** o login guarda o token no navegador e a sessão sai sozinha quando o token
+  expira. Se a API responder 401, a sessão é derrubada com um aviso.
+- **Minhas encomendas (logada):** lista as encomendas da pessoa e cria novas, enviando o token no
+  cabeçalho `Authorization`. As mensagens de erro da API (400 de validação, 401, 409 de data
+  lotada) aparecem na tela.
+
+O endereço da API vem da variável `VITE_API_URL`, definida no Static Site da Render. A API libera
+o CORS só para o endereço do front, configurado na variável `Cors__Origens` do serviço da API,
+sem `AllowAnyOrigin`.
+
+Para rodar no computador: `cd front`, criar `.env.development` com
+`VITE_API_URL=http://localhost:5048`, `npm install` e `npm run dev` (a API precisa estar rodando).
 
 ## Como usei a IA
 
@@ -97,5 +112,13 @@ As migrations são aplicadas na subida da API (`MigrateAsync`). Para criar uma n
   O que aprendi com isso: o health check da hospedagem é uma proteção a mais, porque ele
   impede que uma versão quebrada entre no ar, e vale rodar a API localmente antes do push.
   
-- **O prompt usado para gerar o front:** [preencher depois]
-- **O que aprendi:** [escreva com as suas palavras]
+- **O prompt usado para gerar o front:** 
+ Mandei prints das telas do meu design no Figma (login,
+  login administrativo e catálogo) e a paleta de cores, e pedi: "me dá os códigos logo, bem
+  profissional para uma confeitaria e que faça o que o professor pediu". A IA gerou a vitrine, o
+  login e a página de encomendas seguindo o design. Depois pedi o cadastro e ajustei o visual
+  do login por conta própria.
+- **O que aprendi:** Professor do fundo do coração eu tive dificuldade de entender bastante coisa, mas teve algumas coisa que eu aprendi: 400 é dado inválido, 404 é algo que não existe e 409 é um pedido válido que o  estado do sistema não permite, como a data lotada. 401 é "não sei quem você é" e 403 é "sei, mas você não pode". O dono da encomenda vem do token e nunca do corpo da requisição, senão qualquer
+  cliente poderia agir em nome de outro. A contagem da regra do 409 fica numa transação para duas
+  requisições ao mesmo tempo não passarem do limite. E o health check da hospedagem barra uma
+  versão quebrada, mesmo quando o CI fica verde. 
