@@ -1,6 +1,7 @@
 # Confeitaria API
 
-**Nicho:** Confeitaria por encomenda · **Aluno:** Lucia Maria (@luciaMariaS)
+**Nicho:** Confeitaria por encomenda  
+**Aluno:** Lucia Maria (@luciaMariaS)
 **API no ar:** https://confeitaria-ap.onrender.com/swagger
 **Saúde e versão:** https://confeitaria-ap.onrender.com/health · https://confeitaria-ap.onrender.com/api/versao
 **Front-end:** https://confeitaria-front-tn0x.onrender.com
