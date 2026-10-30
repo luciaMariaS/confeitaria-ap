@@ -5,6 +5,7 @@
 **API no ar:** https://confeitaria-ap.onrender.com/swagger
 **Saúde e versão:** https://confeitaria-ap.onrender.com/health · https://confeitaria-ap.onrender.com/api/versao
 **Front-end:** https://confeitaria-front-tn0x.onrender.com
+**Git Hub:** https://github.com/luciaMariaS/confeitaria-api.git
 
 ## O que a API faz
 
